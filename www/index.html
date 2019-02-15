@@ -1,0 +1,254 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+  <script src="components/loader.js"></script>
+  <script src="lib/onsenui/js/onsenui.min.js"></script>
+
+  <link rel="stylesheet" href="components/loader.css">
+  <link rel="stylesheet" href="lib/onsenui/css/onsenui.css">
+  <link rel="stylesheet" href="lib/onsenui/css/onsen-css-components.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="lib/onsenui/leaflet/leaflet.css">
+  <link rel="stylesheet" href="lib/onsenui/leaflet-gps-master/leaflet-gps-master/src/leaflet-gps.css">
+  <link rel="stylesheet" href="lib/onsenui/GpPluginItowns-2.1.1/GpPluginItowns-2.1.1/GpPluginItowns.css">
+</head>
+<body>
+ 
+  <ons-splitter>
+      <ons-splitter-side id="menu" side="left" width="220px" swipe-target-width="100px" collapse swipeable="force">
+          <ons-page>
+              <ons-list>
+                  <ons-list-item onclick="fn.load('home.html')" tappable>Home</ons-list-item>
+                  <ons-list-item onclick="fn.load('carte.html')" tappable>Carte</ons-list-item>
+                  <ons-list-item onclick="fn.load('settings.html')" tappable>Settings</ons-list-item>
+                  <ons-list-item onclick="fn.load('about.html')" tappable>About</ons-list-item>
+              </ons-list>
+          </ons-page>
+      </ons-splitter-side>
+      <ons-splitter-content id="content" page="home.html"></ons-splitter-content>
+  </ons-splitter>
+  
+  <template id="home.html">
+      <ons-page>
+          <ons-toolbar>
+              <div class="left">
+                  <ons-toolbar-button onclick="fn.open()">
+                      <ons-icon icon="md-menu"></ons-icon>
+                  </ons-toolbar-button>
+              </div>
+              <div class="center">Main</div>
+          </ons-toolbar>
+          <p style="opacity: 0.6; padding-top: 20px;">Swipe right to open the menu!</p>
+      </ons-page>
+  </template>
+  
+  <template id="carte.html">
+      <ons-page id="carte">
+          <ons-toolbar>
+              <div class="left">
+                  <ons-toolbar-button onclick="fn.open()">
+                      <ons-icon icon="md-menu"></ons-icon>
+                  </ons-toolbar-button>
+              </div>
+              <div class="center">Carte interactive</div>
+          </ons-toolbar>
+          <br><br>
+          <ons-search-input placeholder="Search..." modifier="material"></ons-search-input>
+          <ons-list id="places_list">
+          </ons-list>
+          <p>Carte de Créteil : </p>
+          <div id="mapid"></div>
+      </ons-page>
+  </template>
+  
+  <template id="settings.html">
+      <ons-page>
+          <ons-toolbar>
+              <div class="left">
+                  <ons-toolbar-button onclick="fn.open()">
+                      <ons-icon icon="md-menu"></ons-icon>
+                  </ons-toolbar-button>
+              </div>
+              <div class="center">Settings</div>
+          </ons-toolbar>
+      </ons-page>
+  </template>
+  
+  <template id="about.html">
+      <ons-page>
+          <ons-toolbar>
+              <div class="left">
+                  <ons-toolbar-button onclick="fn.open()">
+                      <ons-icon icon="md-menu"></ons-icon>
+                  </ons-toolbar-button>
+              </div>
+              <div class="center">About</div>
+          </ons-toolbar>
+      </ons-page>
+    </template>
+    
+    <script src="lib/onsenui/leaflet/leaflet.js"></script>
+    <script src="lib/onsenui/js/jquery-3.3.1.min.js"></script>
+    <script src="lib/onsenui/leaflet-gps-master/leaflet-gps-master/src/leaflet-gps.js"></script>
+    <script src="lib/onsenui/GpPluginItowns-2.1.1/GpPluginItowns-2.1.1/GpPluginItowns.js"></script>
+  
+  <script>
+   
+      window.fn = {};
+      
+      window.fn.open = function(){
+          var menu = document.getElementById('menu');
+          menu.open();
+      }
+      
+      window.fn.load = function(page){
+          var content = document.getElementById('content');
+          var menu = document.getElementById('menu');
+          
+          content.load(page).then(menu.close.bind(menu));
+      }
+      
+  </script>
+  
+  <script>
+    document.addEventListener('init', function(e){
+         var page = e.target;
+          
+          if(page.id === "carte"){
+              
+              function afficheMarkers(infoRecup, map){
+                  
+                  $.ajax({
+                  url: 'https://theosenilh.fr/api_appli_creteil/json_coords.php',
+                  method: 'GET',
+                  data: {api_key: 'jdhey7te6', location_id: infoRecup},
+                  dataType: 'json',
+                 success: function(data){
+                     
+                     if(infoRecup === "all"){
+                      map.setView([48.7942, 2.46172], 15);
+                  } else {
+                      map.setView([parseFloat(data[0].latitude_point_interet), parseFloat(data[0].longitude_point_interet)], 18);
+                  }
+                     
+                     var json_autres_images = [];
+                     
+                     for(var i = 0; i < data.length; i++){
+                         
+                         var marker = L.marker([parseFloat(data[i].latitude_point_interet), parseFloat(data[i].longitude_point_interet)]);
+                         
+                         if(data[i].autres_images_point_interet !== ""){
+                             
+                             var tableau = JSON.parse(data[i].autres_images_point_interet);
+                             
+                             json_autres_images.push(tableau);
+                         } else {
+                             json_autres_images.push("");
+                         }
+                     
+                     marker.bindPopup("<h1>"+ data[i].nom_point_interet +"</h1><img src=\""+ data[i].photo_point_interet +"\" width=\"100\" height=\"100\"><br><i>Adresse: </i><strong>"+ data[i].adresse_point_interet +"</strong><br><br><p>"+ data[i].description_point_interet +"</p><br>" + recupereDonnees(json_autres_images, i));
+                     
+                     marker.addTo(map);
+                     }
+                 } 
+              });
+              }
+              
+              function recupereDonnees(tableau_images, index){
+                  
+                  var chaine = "";
+                  
+                  if(tableau_images){
+                      if(tableau_images[index] !== ""){
+                      for(var i = 0; i < tableau_images[index].length; i++){
+                         chaine += "<img src=\""+ tableau_images[index][i] +"\" width=\"100\" height=\"100\">"; 
+                      }
+                  }
+                  }
+                  
+                  return chaine;
+              }
+              
+              function autocompleteSearch(requete, search, autoriseBoucle, map){
+                  
+                  var listItems = $(requete);
+                  
+                  console.log(listItems);
+                  
+                  if(autoriseBoucle){
+                          listItems.on('click', function(){
+                          search.val($(this).find(".center h1").text());
+                              
+                              afficheMarkers(parseInt($(this).find(".center p").text()), map);
+                              
+                          $('#places_list').html('');
+                          
+                      });
+                  
+                  }
+              }
+              
+              
+              var map = L.map('mapid');
+              var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+              var osmAttrib = "Map data © OpenStreetMap contributors";
+                  
+                  var osm = new L.TileLayer(osmUrl, {attribution: osmAttrib});
+              
+              map.addLayer(osm);
+              
+              afficheMarkers("all", map);
+              
+              var tinnedGps = {lat: 48.7942, lng: 2.46172};
+              
+              var controlGps = new L.Control.Gps({transform: function(realGps){
+                return tinnedGps;  
+              },
+                  autoCenter: true, 
+                    marker: L.circleMarker([tinnedGps.lat, tinnedGps.lng])});
+              
+              map.addControl(controlGps);
+              
+              
+              $('ons-page ons-search-input').on('keyup', function(){
+                 
+                  var valeur = $('ons-page ons-search-input').val();
+
+                  if(valeur !== ""){
+                      $.ajax({
+                     url: 'https://theosenilh.fr/api_appli_creteil/search_coords.php',
+                      method: 'GET',
+                      data: {api_key: "jdhey7te6", cherche: valeur},
+                      dataType: 'json',
+                      success: function(data){
+                          
+                          var chainehtml = "";
+                          
+                              if(data.length !== 0){
+                              for(var i = 0; i < data.length; i++){
+                              chainehtml += '<ons-list-item modifier="longdivider" tappable><h1>'+ data[i].nom_point_interet +'</h1><i>'+ data[i].adresse_point_interet +'</i><p style="display: none;">'+ data[i].id_point_interet +'</p></ons-list-item>';
+                          }
+                          } else {
+                              chainehtml = '<ons-list-item modifier="longdivider"><p>Pas de correspondance</p></ons-list-item>';
+                          }
+                              $('#places_list').html(chainehtml);
+                          autocompleteSearch('#places_list ons-list-item', $('ons-search-input'), (data.length !== 0), map);
+                          
+                      }
+                  });
+                      
+                  } else {
+                      $('#places_list').html("");
+                  }
+                  
+                  
+              });
+                                                }
+    });
+    </script>
+  
+</body>
+</html>

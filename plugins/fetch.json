@@ -1,0 +1,10 @@
+{
+  "cordova-plugin-http": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-http"
+    },
+    "is_top_level": true,
+    "variables": {}
+  }
+}

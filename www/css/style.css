@@ -1,0 +1,26 @@
+/**/
+
+ons-page{
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+ons-page div#mapid {
+    height: 30rem;
+    position: relative;
+    z-index: 1;
+}
+
+ons-page ons-list#places_list {
+    width: 70vw;
+    margin: 0 auto;
+    position: relative;
+    z-index: 20;
+    max-height: 50vh;
+    overflow: auto;
+}
+
+ons-page ons-search-input {
+    width: 70vw;
+}

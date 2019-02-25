@@ -1,11 +1,13 @@
 {
   "name": "monaca-template-onsenui-v2-js-navigation",
   "dependencies": {
-    "cordova-custom-config": "5.0.2",
+    "cordova-custom-config": "^5.0.3",
     "cordova-plugin-http": "^1.2.0",
     "cordova-plugin-splashscreen": "5.0.1",
     "cordova-plugin-whitelist": "1.3.3",
     "leaflet-gps": "^1.7.6",
+    "leaflet-routing-machine": "^3.2.12",
+    "monaca": "^3.1.0",
     "monaca-plugin-monaca-core": "3.2.0"
   },
   "cordova": {

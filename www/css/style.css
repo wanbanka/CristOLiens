@@ -6,7 +6,7 @@ ons-page{
     z-index: 1;
 }
 
-ons-page div#mapid {
+ons-page div#mapid, ons-page div#map_parcours {
     height: 30rem;
     position: relative;
     z-index: 1;

@@ -1,0 +1,149 @@
+@purple:#4B044D;
+/*Page : liste point d'intérêt*/
+#liste_pt_interet {
+    >ons-page{
+        >ons-toolbar{
+            >div .left {
+                >ons-toolbar-button{
+                    >ons-icon{
+
+                    }
+                }
+            }
+            >div .center {
+
+            }
+        }
+        >div{
+            background-color: white;
+            >div{
+                >img{	
+                	background-image: ;
+                }
+                >p{
+
+                }   
+            }
+        }
+    }
+}
+
+ons-page  {
+text-align: center;
+    position: relative;
+    z-index: 1;
+}
+template[id="carte.html"]{
+    >ons-page{
+        >ons-toolbar{
+            >div .left {
+                >ons-toolbar-button{
+                    >ons-icon{
+
+                    }
+                }
+            }
+            >div .center {
+
+            }
+        }
+        >div{
+             ons-search-input{
+            z-index: 1000;
+        }
+            >ons-list{
+                z-index: 1000;
+            }
+            >p{
+
+            }
+            >div #mapid{
+                position:absolute;
+                bottom:0;
+                height: 100%;
+            }
+        }
+       
+    }
+}
+ons-page div#mapid, ons-page div#map_parcours {
+    height: 100vh;
+    position: relative;
+    z-index: 1;
+    // flex-grow: 3;
+}
+
+ons-page ons-list#places_list {
+    width: 70vw;
+    margin: 0 auto;
+    position: relative;
+    z-index: 20;
+    max-height: 50vh;
+    overflow: auto;
+}
+
+ons-page ons-search-input {
+    width: 70vw;
+}
+ons-page ons-toolbar {
+    background-color:@purple;
+    border: solid 1px red;
+}
+.ons-toolbar {
+    background-color:@purple;
+    .left{
+        color: white;
+        
+    }
+    .center{
+     color: white;
+     font-weight: bold;
+    }
+    .ons-icon{
+        color: white;
+    }
+}
+
+#corps{
+    >ons-search-input{
+        z-index: 100;
+    }
+}
+// #places_list{
+//     z-index: 100;
+
+// }
+#nom_liste_parcours{
+    width: 19%;    
+}
+
+.lieux-liste{
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    background-color:white;
+    border-bottom: @purple 1px solid;
+    >div{
+        width: 25%;      
+        >div{
+            margin: 0 auto;
+            width: 50px;
+            height: 50px;
+            
+            img{
+                margin: 0 auto;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+
+            }
+        }
+        // >img{
+
+        // }
+    }
+    >p{
+        width: 75%;
+
+    }
+}

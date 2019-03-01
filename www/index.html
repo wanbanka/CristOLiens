@@ -17,37 +17,19 @@
 </head>
 <body>
  
-  <ons-splitter>
-      <ons-splitter-side id="menu" side="left" width="220px" swipe-target-width="100px" collapse swipeable="force">
-          <ons-page>
-              <ons-list>
-                  <ons-list-item onclick="fn.load('home.html')" tappable>Accueil</ons-list-item>
-                  <ons-list-item onclick="fn.load('liste_pt_interet.html')" tappable>Liste des points d'intérêts</ons-list-item>
-                  <ons-list-item onclick="fn.load('carte.html')" tappable>Carte</ons-list-item>
-                  <ons-list-item onclick="fn.load('parcours.html')" tappable>Parcours</ons-list-item>
-                  <ons-list-item onclick="fn.load('about.html')" tappable>About</ons-list-item>
-              </ons-list>
-          </ons-page>
-      </ons-splitter-side>
-      <ons-splitter-content id="content" page="home.html"></ons-splitter-content>
-  </ons-splitter>
+ <ons-navigator id="myNavigator" page="home.html" animation="slide"></ons-navigator>
   
   <template id="home.html">
-      <ons-page>
+      <ons-page id="home">
           <ons-toolbar class="ons-toolbar">
-              <div class="left">
-                  <ons-toolbar-button onclick="fn.open()">
-                      <ons-icon icon="md-menu"></ons-icon>
-                  </ons-toolbar-button>
-              </div>
               <div class="center">Accueil</div>
           </ons-toolbar>
           <div class="homebackground">
             <div class="homemask">
-             <a href="#"><div class="hometitle">Découvrir Créteil</div></a> 
-              <a href="#"><div class="homelink" >Trouver un trajet</div></a>
-              <a href="#"><ons-list-item class="homelink" onclick="fn.load('carte.html')" tappable>Carte interactive</ons-list-item></a>
-              <a href="#"><ons-list-item class="homelink" onclick="fn.load('liste_pt_interet.html')" tappable>Points d'intérêt</ons-list-item></a>
+             <div class="hometitle">Découvrir Créteil</div> 
+              <ons-list-item class="homelink" tappable id="liste_parcours.html">Trouver un trajet</ons-list-item>
+              <ons-list-item class="homelink" tappable id="carte.html">Carte interactive</ons-list-item>
+              <ons-list-item class="homelink" tappable id="liste_pt_interet.html">Points d'intérêt</ons-list-item>
               <div class="homefooter">
                 <div class="homefooterimg">
                   <img src="img/logocreteil.png" class="logouc" alt="logo ville de creteil">
@@ -64,13 +46,11 @@
   </template>
   
   <template id="liste_pt_interet.html">  
-    <ons-page>
+    <ons-page id="liste_pt_interet">
         <ons-toolbar class="ons-toolbar">
-            <div class="left">
-                <ons-toolbar-button onclick="fn.open()">
-                    <ons-icon icon="md-menu"></ons-icon>
-                </ons-toolbar-button>
-            </div>
+           <div class="left">
+               <ons-back-button>Retour</ons-back-button>
+           </div>
             <div class="center">Liste des points d'intérêts</div>
         </ons-toolbar>
         <div class="lieux-liste">
@@ -92,11 +72,9 @@
   <template id="carte.html">
       <ons-page id="carte">
           <ons-toolbar class="ons-toolbar">
-              <div class="left">
-                  <ons-toolbar-button onclick="fn.open()">
-                      <ons-icon icon="md-menu"></ons-icon>
-                  </ons-toolbar-button>
-              </div>
+             <div class="left">
+               <ons-back-button>Retour</ons-back-button>
+           </div>
               <div class="center">Carte interactive</div>
           </ons-toolbar>
           <br><br>
@@ -108,47 +86,36 @@
       </ons-page>
   </template>
   
-  <template id="parcours.html">
-        
-        <ons-navigator page="liste_parcours.html" animation="fade">
-           <template id="liste_parcours.html">
-               <ons-page id="parcours">
+  <template id="liste_parcours.html">
+               <ons-page id="liste_parcours">
           <ons-toolbar class="ons-toolbar">
-              <div class="left">
-                  <ons-toolbar-button onclick="fn.open()">
-                      <ons-icon icon="md-menu"></ons-icon>
-                  </ons-toolbar-button>
-              </div>
+             <div class="left">
+               <ons-back-button>Retour</ons-back-button>
+           </div>
               <div class="center">Types de parcours</div>
           </ons-toolbar>
           <ons-card></ons-card>
       </ons-page>
             </template>
-            
-            <template id="carte_parcours.html">
+  
+  <template id="carte_parcours.html">
                 <ons-page id="carte_parcours">
             <ons-toolbar>
-                <div class="left">
-                    <ons-back-button>Retour</ons-back-button>
-                </div>
+               <div class="left">
+               <ons-back-button>Retour</ons-back-button>
+           </div>
                 <div class="center"></div>
             </ons-toolbar>
              <div id="map_parcours"></div>
          </ons-page>
             </template>
-       
-        </ons-navigator>
-     
-  </template>
   
   <template id="about.html">
-      <ons-page>
+      <ons-page id="about">
           <ons-toolbar class="ons-toolbar">
-              <div class="left">
-                  <ons-toolbar-button onclick="fn.open()">
-                      <ons-icon icon="md-menu"></ons-icon>
-                  </ons-toolbar-button>
-              </div>
+             <div class="left">
+               <ons-back-button>Retour</ons-back-button>
+           </div>
               <div class="center">About</div>
           </ons-toolbar>
       </ons-page>
@@ -161,34 +128,25 @@
     <script src="lib/onsenui/leaflet-routing-machine-3.2.12/leaflet-routing-machine-3.2.12/examples/Control.Geocoder.js"></script>
   
   <script>
-   
-      window.fn = {};
-      
-      window.fn.open = function(){
-          var menu = document.getElementById('menu');
-          menu.open();
-      }
-      
-      window.fn.load = function(page){
-          var content = document.getElementById('content');
-          var menu = document.getElementById('menu');
-          
-          content.load(page).then(menu.close.bind(menu));
-      }
-      
-  </script>
-  
-  <script>
       ons.ready(function(){
          console.log('Ready');
           
           var tinnedGps = {lat: 0, lng: 0};
+          var navigatorM = document.querySelector('#myNavigator');
          
           document.addEventListener('init', function(e){
          var page = e.target;
         console.log(page.id);
-          
-          if(page.id === "carte"){
+              
+              if(page.id === "home"){
+                  var tableauLiens = page.querySelectorAll('.homebackground .homemask ons-list-item');
+                  
+                  for(var i = 0; i < tableauLiens.length; i++){
+                      tableauLiens[i].addEventListener('click', function(){
+                          navigatorM.pushPage(this.id);
+                      });
+                  }
+              } else if(page.id === "carte"){
               
               function afficheMarkers(infoRecup, map){
                   
@@ -225,26 +183,6 @@
                      marker.addTo(map);
                          
                      }
-                     
-                     var controlFou = new L.Control.Gps({
-                  transform: function(realGps){
-                      tinnedGps.lat = realGps.lat;
-                      tinnedGps.lng = realGps.lng;
-                      return tinnedGps;
-                  },
-                  autoCenter: true,
-                  marker: L.marker([tinnedGps.lat, tinnedGps.lng])
-              });
-              
-              
-              map.addControl(controlFou);
-                         
-                         $('.gps-button').on('click', function(){
-                                       if(!$(this).hasClass('active')){
-                                           
-                                           map.setView([48.7942, 2.46172], 15);
-                                       } 
-                                    });
                  } 
               });
               }
@@ -303,6 +241,26 @@
               map.addLayer(osm);
               
               afficheMarkers("all", map);
+                  
+                  var controlFou = new L.Control.Gps({
+                  transform: function(realGps){
+                      tinnedGps.lat = realGps.lat;
+                      tinnedGps.lng = realGps.lng;
+                      return tinnedGps;
+                  },
+                  autoCenter: true,
+                  marker: L.marker([tinnedGps.lat, tinnedGps.lng])
+              });
+              
+              
+              map.addControl(controlFou);
+                  
+                  $('.gps-button').on('click', function(){
+                                       if(!$(this).hasClass('active')){
+                                           
+                                           map.setView([48.7942, 2.46172], 15);
+                                       } 
+                                    });
               
               $('ons-page ons-search-input').on('keyup', function(){
                  
@@ -337,7 +295,7 @@
                   
                   
               });
-                } else if(page.id === "parcours"){
+                } else if(page.id === "liste_parcours"){
                     
                     
                     function listeParcours(option){

@@ -6,11 +6,11 @@
   <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
   <script src="components/loader.js"></script>
   <script src="lib/onsenui/js/onsenui.min.js"></script>
-
   <link rel="stylesheet" href="components/loader.css">
   <link rel="stylesheet" href="lib/onsenui/css/onsenui.css">
   <link rel="stylesheet" href="lib/onsenui/css/onsen-css-components.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/Accueil.css">
   <link rel="stylesheet" href="lib/onsenui/leaflet/leaflet.css">
   <link rel="stylesheet" href="lib/onsenui/leaflet-gps-master/leaflet-gps-master/src/leaflet-gps.css">
   <link rel="stylesheet" href="lib/onsenui/leaflet-routing-machine-3.2.12/leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.css">
@@ -21,7 +21,8 @@
       <ons-splitter-side id="menu" side="left" width="220px" swipe-target-width="100px" collapse swipeable="force">
           <ons-page>
               <ons-list>
-                  <ons-list-item onclick="fn.load('home.html')" tappable>Home</ons-list-item>
+                  <ons-list-item onclick="fn.load('home.html')" tappable>Accueil</ons-list-item>
+                  <ons-list-item onclick="fn.load('liste_pt_interet.html')" tappable>Liste des points d'intérêts</ons-list-item>
                   <ons-list-item onclick="fn.load('carte.html')" tappable>Carte</ons-list-item>
                   <ons-list-item onclick="fn.load('parcours.html')" tappable>Parcours</ons-list-item>
                   <ons-list-item onclick="fn.load('about.html')" tappable>About</ons-list-item>
@@ -33,21 +34,64 @@
   
   <template id="home.html">
       <ons-page>
-          <ons-toolbar>
+          <ons-toolbar class="ons-toolbar">
               <div class="left">
                   <ons-toolbar-button onclick="fn.open()">
                       <ons-icon icon="md-menu"></ons-icon>
                   </ons-toolbar-button>
               </div>
-              <div class="center">Main</div>
+              <div class="center">Accueil</div>
           </ons-toolbar>
-          <p style="opacity: 0.6; padding-top: 20px;">Swipe right to open the menu!</p>
+          <div class="homebackground">
+            <div class="homemask">
+             <a href="#"><div class="hometitle">Découvrir Créteil</div></a> 
+              <a href="#"><div class="homelink" >Trouver un trajet</div></a>
+              <a href="#"><ons-list-item class="homelink" onclick="fn.load('carte.html')" tappable>Carte interactive</ons-list-item></a>
+              <a href="#"><ons-list-item class="homelink" onclick="fn.load('liste_pt_interet.html')" tappable>Points d'intérêt</ons-list-item></a>
+              <div class="homefooter">
+                <div class="homefooterimg">
+                  <img src="img/logocreteil.png" class="logouc" alt="logo ville de creteil">
+                  <img src="img/logoupem.png" class="logouc" alt="logo université paris est marne la vallée">
+                </div>
+          <div class="homementions">
+            <a href="#">Mentions légales</a><br />
+            <span class="homeversion">Version beta 1.0</span>
+          </div>
+        </div>
+      </div>
+    </div>
       </ons-page>
   </template>
   
+  <template id="liste_pt_interet.html">  
+    <ons-page>
+        <ons-toolbar class="ons-toolbar">
+            <div class="left">
+                <ons-toolbar-button onclick="fn.open()">
+                    <ons-icon icon="md-menu"></ons-icon>
+                </ons-toolbar-button>
+            </div>
+            <div class="center">Liste des points d'intérêts</div>
+        </ons-toolbar>
+        <div class="lieux-liste">
+          <div><div><img src="img/nelson.jpg"></div><!-- <img src=""> --></div>
+          <p>Médiathèque Nelson Mandela</p>
+        </div>
+         <div class="lieux-liste">
+          <div><div><img src="img/Eglise_Saint-Christophe.jpg"></div><!-- <img src=""> --></div>
+          <p>Eglise saint christophe</p>
+        </div>
+         <div class="lieux-liste">
+          <div><div><img src="img/Colombier.jpg"></div><!-- <img src=""> --></div>
+          <p>Colombier</p>
+        </div>
+    </ons-page>
+</template>
+  
+  
   <template id="carte.html">
       <ons-page id="carte">
-          <ons-toolbar>
+          <ons-toolbar class="ons-toolbar">
               <div class="left">
                   <ons-toolbar-button onclick="fn.open()">
                       <ons-icon icon="md-menu"></ons-icon>
@@ -69,7 +113,7 @@
         <ons-navigator page="liste_parcours.html" animation="fade">
            <template id="liste_parcours.html">
                <ons-page id="parcours">
-          <ons-toolbar>
+          <ons-toolbar class="ons-toolbar">
               <div class="left">
                   <ons-toolbar-button onclick="fn.open()">
                       <ons-icon icon="md-menu"></ons-icon>
@@ -99,7 +143,7 @@
   
   <template id="about.html">
       <ons-page>
-          <ons-toolbar>
+          <ons-toolbar class="ons-toolbar">
               <div class="left">
                   <ons-toolbar-button onclick="fn.open()">
                       <ons-icon icon="md-menu"></ons-icon>
@@ -135,7 +179,12 @@
   </script>
   
   <script>
-    document.addEventListener('init', function(e){
+      ons.ready(function(){
+         console.log('Ready');
+          
+          var tinnedGps = {lat: 0, lng: 0};
+         
+          document.addEventListener('init', function(e){
          var page = e.target;
         console.log(page.id);
           
@@ -174,7 +223,28 @@
                      marker.bindPopup("<h1>"+ data[i].nom_point_interet +"</h1><img src=\""+ data[i].photo_point_interet +"\" width=\"100\" height=\"100\"><br><i>Adresse: </i><strong>"+ data[i].adresse_point_interet +"</strong><br><br><p>"+ data[i].description_point_interet +"</p><br>" + recupereDonnees(json_autres_images, i));
                      
                      marker.addTo(map);
+                         
                      }
+                     
+                     var controlFou = new L.Control.Gps({
+                  transform: function(realGps){
+                      tinnedGps.lat = realGps.lat;
+                      tinnedGps.lng = realGps.lng;
+                      return tinnedGps;
+                  },
+                  autoCenter: true,
+                  marker: L.marker([tinnedGps.lat, tinnedGps.lng])
+              });
+              
+              
+              map.addControl(controlFou);
+                         
+                         $('.gps-button').on('click', function(){
+                                       if(!$(this).hasClass('active')){
+                                           
+                                           map.setView([48.7942, 2.46172], 15);
+                                       } 
+                                    });
                  } 
               });
               }
@@ -233,16 +303,6 @@
               map.addLayer(osm);
               
               afficheMarkers("all", map);
-              
-              var tinnedGps = {lat: 48.7942, lng: 2.46172};
-              
-              var controlGps = new L.Control.Gps({transform: function(realGps){
-                return tinnedGps;  
-              },
-                  autoCenter: true, 
-                    marker: L.circleMarker([tinnedGps.lat, tinnedGps.lng])});
-              
-              map.addControl(controlGps);
               
               $('ons-page ons-search-input').on('keyup', function(){
                  
@@ -324,6 +384,7 @@
                                 data: {api_key: "jdhey7te6", parcours_id: parseInt(page.data.id)},
                                 dataType: 'json',
                                 success: function(data){
+                                    $('.leaflet-right').hide();
                                     
                                     console.log(data);
                                     
@@ -340,11 +401,35 @@
                           router: L.Routing.mapbox("pk.eyJ1IjoidGhlb2Rvcm9zIiwiYSI6ImNqb2sxdW01YTAyN28zb21uY21jeXMzY3cifQ._g5OAq0Wjfou_LsBW07TAQ", {profile: "mapbox/walking"}),
                   routeWhileDragging: true,
               }).addTo(map);
+                                    
+                                    var controlFou = new L.Control.Gps({
+                  transform: function(realGps){
+                      tinnedGps.lat = realGps.lat;
+                      tinnedGps.lng = realGps.lng;
+                      return tinnedGps;
+                  },
+                  autoCenter: true,
+                  marker: L.marker([tinnedGps.lat, tinnedGps.lng])
+              });
+                            
+             map.addControl(controlFou);
+                                    
+                                    $('.gps-button').on('click', function(){
+                                       if(!$(this).hasClass('active')){
+                                           
+                                           var newTableau = tableauWaypoints.slice(tableauWaypoints.length-1);
+                                           
+                                           map.setView([parseFloat(newTableau[0].lat), parseFloat(newTableau[0].lng)], 15);
+                                       } 
+                                    });
+                                    
                                 }
                             });
                             
                  }
     });
+          
+      });
     </script>
   
 </body>

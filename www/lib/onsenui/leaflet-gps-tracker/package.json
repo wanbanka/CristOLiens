@@ -1,0 +1,55 @@
+{
+  "_from": "leaflet-gps-tracker",
+  "_id": "leaflet-gps-tracker@1.2.1",
+  "_inBundle": false,
+  "_integrity": "sha512-XNA6c437HS198hDg3b23gqD3MxIaExVjzaAE+57W6esrvI6FM8HEwymRNBQFQ9YRtAMkH4p4lipyFSLpcRIF2Q==",
+  "_location": "/leaflet-gps-tracker",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "leaflet-gps-tracker",
+    "name": "leaflet-gps-tracker",
+    "escapedName": "leaflet-gps-tracker",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/leaflet-gps-tracker/-/leaflet-gps-tracker-1.2.1.tgz",
+  "_shasum": "4079f4db999d5f04c6595f73570fb833dfb89791",
+  "_spec": "leaflet-gps-tracker",
+  "_where": "C:\\Workspace\\projetApp",
+  "author": {
+    "name": "Alban Mouton",
+    "email": "alban.mouton@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/koumoul-dev/leaflet-gps-tracker/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Customizable control to integrate navigator.geolocation.watchPosition functionalities in leaflet.",
+  "homepage": "https://github.com/koumoul-dev/leaflet-gps-tracker#readme",
+  "keywords": [
+    "leaflet",
+    "map",
+    "GPS",
+    "position",
+    "tracking"
+  ],
+  "license": "MIT",
+  "main": "GPSControl.js",
+  "name": "leaflet-gps-tracker",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koumoul-dev/leaflet-gps-tracker.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.2.1"
+}

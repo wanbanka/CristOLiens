@@ -117,7 +117,22 @@
                         </div>
                         <div class="center">Parcours perso</div>
                     </ons-toolbar>
-                    <ons-card></ons-card>
+                    <ons-list></ons-list>
+                    <ons-button class="center">Générer un parcours</ons-button>
+                </ons-page>
+            </template>
+            
+            <template id="perso_carte.html">
+                <ons-page id="perso_carte">
+                    <ons-toolbar class="ons-toolbar">
+                        <div class="left">
+                            <ons-back-button>Retour</ons-back-button>
+                        </div>
+                        <div class="center">
+                            Parcours perso
+                        </div>
+                    </ons-toolbar>
+                    <div id="mapperso"></div>
                 </ons-page>
             </template>
   
@@ -474,6 +489,10 @@
                              });
                         
                         } else if(page.id === "perso_parcours"){
+                            
+                            checkedPlaces = [];
+                            
+                            $('ons-list').html('<br><br><div class="center"><ons-progress-circular indeterminate class="center"></ons-progress-circular></div>');
                            
                             $.ajax({
                             url: 'https://theosenilh.fr/api_appli_creteil/json_coords.php',
@@ -485,15 +504,60 @@
                                  var chaine = "";
                                  
                                  for(var i = 0; i < data.length; i++){
-                                     chaine += '<ons-checkbox input-id="check-'+ i +'" id="check-'+ i +'"></ons-checkbox><label for="check-'+ i +'" class="center">'+ data[i].nom_point_interet +'</label><br><br>';
+                                     chaine += '<ons-list-item tappable><label class="left"><ons-checkbox input-id="'+ data[i].id_point_interet +'" value="['+ data[i].latitude_point_interet +', '+ data[i].longitude_point_interet +']"></ons-checkbox></label><label for="'+ data[i].id_point_interet +'" class="center">'+ data[i].nom_point_interet +'</label></ons-list-item>';
                                  }
                                  
-                                 $('ons-card').html(chaine);
+                                 $('ons-list').html(chaine);
+                                 
+                                 $('ons-list ons-list-item').on('click', function(){
+                                     checkedPlaces = $('ons-list ons-list-item ons-checkbox :checkbox:checked');
+                                     console.log(checkedPlaces);
+                                 });
+                                 
+                                 $('ons-button').on('click', function(){
+                                    navigatorM.pushPage('perso_carte.html', {data: {checked_elements: checkedPlaces}}); 
+                                 });
                                  
                              }
                          });
                             
-                        } else if(page.id === "carte_parcours"){
+                        } else if(page.id === "perso_carte"){
+                                  
+                            
+                            var map = L.map('mapperso');
+              var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+              var osmAttrib = "Map data © OpenStreetMap contributors";
+                            
+                            var osm = new L.TileLayer(osmUrl, {attribution: osmAttrib});
+              
+              map.addLayer(osm);
+                            
+                            var tableauLieux = [];
+                            
+                            console.log(page.data.checked_elements);
+                            
+                            navigator.geolocation.getCurrentPosition(function(position){
+                               
+                                map.setView([position.coords.latitude, position.coords.longitude], 12);
+                                
+                                tableauLieux.push(L.latLng(position.coords.latitude, position.coords.longitude));
+                                
+                                for(var i = 0; i < page.data.checked_elements.length; i++){
+                                    tableauLieux.push(L.latLng(JSON.parse($(page.data.checked_elements[i]).val())));
+                                }
+                                
+                                L.Routing.control({
+                  waypoints: tableauLieux,
+                          router: L.Routing.mapbox("pk.eyJ1IjoidGhlb2Rvcm9zIiwiYSI6ImNqb2sxdW01YTAyN28zb21uY21jeXMzY3cifQ._g5OAq0Wjfou_LsBW07TAQ", {profile: "mapbox/walking"}),
+                                        lineOptions: {
+                                            addWaypoints: false
+                                        }
+              }).addTo(map);
+                                $('.leaflet-right').hide();
+                                
+                            });
+                                  
+                                  } else if(page.id === "carte_parcours"){
                         
                             page.querySelector('ons-toolbar .center').textContent = page.data.title;
                             
@@ -531,7 +595,9 @@
                                     L.Routing.control({
                   waypoints: tableauWaypoints,
                           router: L.Routing.mapbox("pk.eyJ1IjoidGhlb2Rvcm9zIiwiYSI6ImNqb2sxdW01YTAyN28zb21uY21jeXMzY3cifQ._g5OAq0Wjfou_LsBW07TAQ", {profile: "mapbox/walking"}),
-                  routeWhileDragging: true
+                                        lineOptions: {
+                                            addWaypoints: false
+                                        }
               }).addTo(map);
                                         
                                     });
@@ -577,7 +643,10 @@
                   waypoints: [waypoint, L.latLng(48.796, 2.45226), L.latLng(48.7942, 2.46132)],
                          language: 'fr',
                           router: L.Routing.mapbox("pk.eyJ1IjoidGhlb2Rvcm9zIiwiYSI6ImNqb2sxdW01YTAyN28zb21uY21jeXMzY3cifQ._g5OAq0Wjfou_LsBW07TAQ", {profile: "mapbox/walking"}),
-                  routeWhileDragging: true
+                             lineOptions: {
+                                            addWaypoints: false,
+                                 draggableWaypoints: false
+                                        }
               }).addTo(map);
                      
                      var coords = encodeURI(''+ position.coords.longitude +','+ position.coords.latitude +';2.45226,48.796;2.46132,48.7942');
@@ -637,6 +706,8 @@
                              
                              
                              $('.leaflet-top.leaflet-right').html('<div class="leaflet-routing-container leaflet-bar leaflet-routing-collapsible leaflet-control"><div class="leaflet-routing-alternatives-container"><div class="leaflet-routing-alt"><div><span class="leaflet-routing-icon leaflet-routing-icon-'+ turnInstruction +'"></span></div><strong>'+ data.routes[0].legs[0].steps[0].distance +' m</strong><h1>' + data.routes[0].legs[0].steps[0].bannerInstructions[0].primary.text + '</h1></div></div></div>');
+                             
+                             $('.leaflet-top.leaflet-right .leaflet-routing-container .leaflet-routing-alternatives-container .leaflet-routing-alt').append('<blockquote><strong>'+ convertToKilometers(data.routes[0].distance) +', '+ convertToMinutes(data.routes[0].duration) +'</strong></blockquote>')
                              
                          }
                      });

@@ -1,5 +1,17 @@
 @purple:#4B044D;
+@green:#9DAC1F;
 /*Page : liste point d'intérêt*/
+@font-face {
+font-family: 'ViceCity';
+src: url('../font/ViceCitySans.otf');
+}
+ons-list-item, .homelink, .list-item{
+    list-style-type: none;
+    list-style:none;
+    text-decoration: none;
+    border:none;
+}
+
 #liste_pt_interet {
     >ons-page{
         >ons-toolbar{
@@ -33,44 +45,11 @@ text-align: center;
     position: relative;
     z-index: 1;
 }
-template[id="carte.html"]{
-    >ons-page{
-        >ons-toolbar{
-            >div .left {
-                >ons-toolbar-button{
-                    >ons-icon{
-
-                    }
-                }
-            }
-            >div .center {
-
-            }
-        }
-        >div{
-             ons-search-input{
-            z-index: 1000;
-        }
-            >ons-list{
-                z-index: 1000;
-            }
-            >p{
-
-            }
-            >div #mapid{
-                position:absolute;
-                bottom:0;
-                height: 100%;
-            }
-        }
-       
-    }
-}
-ons-page div#mapid, ons-page div#map_parcours {
-    height: 100vh;
+ons-page div#map_parcours {
+    min-height: calc(~"100vh - 44px");
     position: relative;
     z-index: 1;
-    // flex-grow: 3;
+    flex-grow: 3;
 }
 
 ons-page ons-list#places_list {
@@ -91,6 +70,7 @@ ons-page ons-toolbar {
 }
 .ons-toolbar {
     background-color:@purple;
+    fill: white;
     .left{
         color: white;
         
@@ -147,3 +127,97 @@ ons-page ons-toolbar {
 
     }
 }
+//TOOLBAR
+#toolbar-back-button{   
+        fill: white;     
+}
+ons-toolbar{
+    background-color:@purple;
+
+}
+.back-button__label{
+    color: white;
+}
+.back-button--material__icon{
+        fill: white;
+}
+.back-button__icon{
+    fill: #ffffff;
+}
+.toolbar__title{
+    color:#fff;
+}
+//SEARCH
+#liste_pt_interet #search-bar ons-search-input{
+    position: top;
+    margin: 0 auto;
+    z-index: 2;
+}
+
+div .search-bar{
+    background-color:#4b044d;
+    padding: 2% 0 4% 0 ;
+    position:fixed;
+    z-index:25;
+    width: 100%;
+}
+#map_carte-interactive{
+    position:relative !important;
+}
+//Affichage map test
+ons-page div #maptest{
+    height:100vh;
+    position:relative;
+    z-index: 1;
+}
+//Affichage carte interactive
+div #mapid{
+        position:relative;
+        bottom:0;
+        min-height: calc(~"100vh - 114px");
+        // height: auto;
+        // margin-top: 70.1167px;
+    }
+
+//LEAFLET Navigation
+
+.leaflet-routing-alt{
+    height: 88px;
+    background-color:@green !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    color:white;
+    display: flex;
+    >div{
+        display: flex;
+        width: 10%;
+        fill: white;
+
+        >span{
+
+        }
+    }
+    >strong{
+        width: 15%;
+        display: flex;
+    }
+    >h1{
+        display: flex;
+        font-size: 20px !important;
+        font-weight: bold;
+        left: 0;
+    }
+    >blockquote{
+
+    }
+}
+.leaflet-top .leaflet-left{
+    
+}
+.leaflet-touch .leaflet-bar{
+    border: 0!important;
+}
+
+ .leaflet-container{
+     font:"Helvetica Neue", Arial, Helvetica, sans-serif !important;
+ }

@@ -136,7 +136,7 @@ L.Control.Gps = L.Control.extend({
 		}, this);
 
 		this._map.locate({
-			enableHighAccuracy: false,
+			enableHighAccuracy: true,
 			watch: true,
 			setView: false,//this.options.autoCenter,
 			//maxZoom: this.options.maxZoom || this._map.getZoom()

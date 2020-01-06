@@ -31,7 +31,7 @@
               <ons-list-item class="homelink" tappable id="liste_parcours.html">Trouver un trajet</ons-list-item>
               <ons-list-item class="homelink" tappable id="carte.html">Carte interactive</ons-list-item>
               <ons-list-item class="homelink" tappable id="liste_pt_interet.html">Points d'intérêt</ons-list-item>
-              <ons-list-item class="homelink" tappable id="about.html">Test</ons-list-item>
+              <!--<ons-list-item class="homelink" tappable id="about.html">Test</ons-list-item>-->
               <div class="homefooter">
                 <div class="homefooterimg">
                   <img src="img/logocreteil.png" class="logouc" alt="logo ville de creteil">
@@ -55,9 +55,9 @@
            </div>
             <div class="center">Liste des points d'intérêts</div>
         </ons-toolbar>
-        <div id="search-bar">
-            <ons-search-input placeholder="Search..." modifier="material"></ons-search-input>
-        </div><br><br>
+        <div class="search-bar">
+            <ons-search-input placeholder="Chercher..." modifier="material"></ons-search-input>
+        </div><br><br><br><br>
         <ons-list></ons-list>
     </ons-page>
 </template>
@@ -85,13 +85,13 @@
              <div class="left">
                <ons-back-button>Retour</ons-back-button>
            </div>
-              <div class="center">Carte interactive</div>
+              <div class="center">Carte de créteil</div>
           </ons-toolbar>
-          <br><br>
-          <ons-search-input placeholder="Search..." modifier="material"></ons-search-input>
+          <div id="map_carte-interactive" class="search-bar">
+           <ons-search-input placeholder="Chercher..." modifier="material"></ons-search-input>
+          </div>
           <ons-list id="places_list">
           </ons-list>
-          <p>Carte de Créteil : </p>
           <div id="mapid"></div>
       </ons-page>
   </template>
@@ -104,7 +104,8 @@
            </div>
               <div class="center">Types de parcours</div>
           </ons-toolbar>
-          <ons-card></ons-card>
+          <ons-card class="card_sector"></ons-card>
+          <ons-card class="card_theme"></ons-card>
           <ons-button class="center">Personnaliser son parcours</ons-button>
       </ons-page>
             </template>
@@ -148,7 +149,7 @@
          </ons-page>
             </template>
   
-  <template id="about.html">
+  <!--<template id="about.html">
       <ons-page id="about">
           <ons-toolbar class="ons-toolbar">
              <div class="left">
@@ -158,7 +159,7 @@
           </ons-toolbar>
           <div id="maptest"></div>
       </ons-page>
-    </template>
+    </template>-->
 
     <script src="lib/onsenui/leaflet/leaflet.js"></script>
     <script src="lib/onsenui/js/jquery-3.3.1.min.js"></script>
@@ -166,561 +167,7 @@
     <script src="lib/onsenui/leaflet-routing-machine-3.2.12/leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.min.js"></script>
     <script src="lib/onsenui/leaflet-routing-machine-3.2.12/leaflet-routing-machine-3.2.12/examples/Control.Geocoder.js"></script>
     <script src="lib/onsenui/leaflet-gps-tracker/GPSControl.js"></script>
-  
-  <script>
-      ons.ready(function(){
-         console.log('Ready');
-         
-          document.addEventListener('init', function(e){
-         var page = e.target;
-        console.log(page.id);
-              
-              var tinnedGps = {lat: 0, lng: 0};
-          var navigatorM = document.querySelector('#myNavigator');
-              
-              if(page.id === "home"){
-                  var tableauLiens = page.querySelectorAll('.homebackground .homemask ons-list-item');
-                  
-                  for(var i = 0; i < tableauLiens.length; i++){
-                      tableauLiens[i].addEventListener('click', function(){
-                          navigatorM.pushPage(this.id);
-                      });
-                  }
-              } else if (page.id === 'liste_pt_interet'){
-                  
-                  function clickListItem(navigation){
-                      $('ons-list-item').on('click', function(){
-                                    navigation.pushPage('pt_interet.html', {data: {id: $(this).attr('tabindex')}}); 
-                                 });
-                  }
-                  
-                  function appelListItems(){
-                      $.ajax({
-                            url: 'https://theosenilh.fr/api_appli_creteil/json_coords.php',
-                             method: 'GET',
-                             data: {api_key: 'jdhey7te6', location_id: 'all'},
-                             dataType: 'json',
-                             success: function(data){
-                                 
-                                 var chaine = "";
-                                 
-                                 for(var i = 0; i < data.length; i++){
-                                     chaine += '<ons-list-item tappable tabindex="'+ data[i].id_point_interet +'"><div class="left"><img class="list-item__thumbnail" src="'+ data[i].photo_point_interet +'"></div><p>'+ data[i].nom_point_interet +'</p></ons-list-item>';
-                                 }
-                                 
-                                 $('ons-list').html(chaine);
-                                 
-                                 clickListItem(navigatorM);
-                                 
-                             }
-                         });
-                  }
-                  
-                  $('ons-list').html('<br><br><div class="center"><ons-progress-circular indeterminate class="center"></ons-progress-circular></div>');
-                  
-                  appelListItems();
-                  
-                  
-                  $('ons-search-input').on('keyup', function(e){
-                      var valeur = $('ons-search-input').val().trim();
-                      
-                      if(valeur !== ""){
-                           $.ajax({
-                         url: 'https://theosenilh.fr/api_appli_creteil/search_coords.php',
-                         method: 'GET',
-                         data: {api_key: "jdhey7te6", cherche: valeur},
-                         dataType: 'json',
-                         success: function(data){
-                             
-                             var chaine = "";
-                                 
-                             console.log(data);
-                             
-                             
-                                 if(data.length !== 0){
-                                     for(var i = 0; i < data.length; i++){
-                                     chaine += '<ons-list-item tappable tabindex="'+ data[i].id_point_interet +'"><div class="left"><img class="list-item__thumbnail" src="'+ data[i].photo_point_interet +'"></div><p>'+ data[i].nom_point_interet +'</p></ons-list-item>';
-                                         
-                                     }
-                                         
-                                         $('ons-list').html(chaine);
-                                     
-                                     clickListItem(navigatorM);
-                                         
-                                 } else {
-                                     $('ons-list').html('<br><br><p class="center"><ons-icon icon="md-block-alt" size="20px"></ons-icon>&nbsp;Pas de résultats à votre recherche</p>');
-                                 }
-                             
-                             
-                         }
-                     });
-                      } else {
-                            
-                            appelListItems();
-                              
-                            }
-                      
-                    
-                  });
-                  
-                  
-                         
-                         } else if(page.id === "pt_interet"){
-                             
-                             $.ajax({
-                                url: 'https://theosenilh.fr/api_appli_creteil/json_coords.php',
-                                 method: 'GET',
-                                 data: {api_key: 'jdhey7te6', location_id: parseInt(page.data.id)},
-                                 dataType: 'json',
-                                 success: function(data){
-                                     
-                                     
-                                     for(var i = 0; i < data.length; i++){
-                                         
-                                         var chaine = "";
-                                         
-                                         page.querySelector('.center').textContent = data[i].nom_point_interet;
-                                         
-                                         $('ons-card img').attr('src', data[i].photo_point_interet);
-                                         
-                                         $('ons-card img').attr('alt', data[i].nom_point_interet);
-                                         
-                                         $('ons-card img').attr('title', data[i].nom_point_interet);
-                                         
-                                         $('.title').text(data[i].nom_point_interet);
-                                         
-                                         chaine += "<i>"+ data[i].adresse_point_interet +"</i><br><p>"+ data[i].description_point_interet +"</p>";
-                                         
-                                         if(data[i].autres_images_point_interet !== "" && data[i].autres_images_point_interet !== null){
-                                             var tableau = JSON.parse(data[i].autres_images_point_interet);
-                                             
-                                             chaine += "<br><section>";
-                                             
-                                             for(var j = 0; j < tableau.length; j++){
-                                                 chaine += '<img src="'+ tableau[j] +'" alt="'+ tableau[j] +'" title="'+ tableau[j] +'" width="10%" height="10%">';
-                                             }
-                                             
-                                             chaine += "</section>";
-                                         }
-                                         
-                                         $('.content').html(chaine);
-                                         
-                                     }
-                                 }
-                             });
-                             
-                             
-                         } else if(page.id === "carte"){
-              
-              function afficheMarkers(infoRecup, map){
-                  
-                  $.ajax({
-                  url: 'https://theosenilh.fr/api_appli_creteil/json_coords.php',
-                  method: 'GET',
-                  data: {api_key: 'jdhey7te6', location_id: infoRecup},
-                  dataType: 'json',
-                 success: function(data){
-                     
-                     if(infoRecup === "all"){
-                      map.setView([48.7942, 2.46172], 15);
-                  } else {
-                      map.setView([parseFloat(data[0].latitude_point_interet), parseFloat(data[0].longitude_point_interet)], 18);
-                  }
-                     
-                     var json_autres_images = [];
-                     
-                     for(var i = 0; i < data.length; i++){
-                         
-                         var marker = L.marker([parseFloat(data[i].latitude_point_interet), parseFloat(data[i].longitude_point_interet)]);
-                         
-                         if(data[i].autres_images_point_interet !== "" && data[i].autres_images_point_interet !== null){
-                             
-                             var tableau = JSON.parse(data[i].autres_images_point_interet);
-                             
-                             json_autres_images.push(tableau);
-                         } else {
-                             json_autres_images.push("");
-                         }
-                     
-                     marker.bindPopup("<h1>"+ data[i].nom_point_interet +"</h1><img src=\""+ data[i].photo_point_interet +"\" width=\"100\" height=\"100\"><br><i>Adresse: </i><strong>"+ data[i].adresse_point_interet +"</strong><br><br><p>"+ data[i].description_point_interet +"</p><br>" + recupereDonnees(json_autres_images, i));
-                     
-                     marker.addTo(map);
-                         
-                     }
-                 } 
-              });
-              }
-              
-              function latLngMarker(infoRecup, map){
-                  
-                 return $.ajax({
-                  url: 'https://theosenilh.fr/api_appli_creteil/json_coords.php',
-                  method: 'GET',
-                  data: {api_key: 'jdhey7te6', location_id: infoRecup},
-                  dataType: 'json'
-                  });
-              }
-              
-              function recupereDonnees(tableau_images, index){
-                  
-                  var chaine = "";
-                  
-                  if(tableau_images){
-                      if(tableau_images[index] !== "" && tableau_images[index] !== null){
-                      for(var i = 0; i < tableau_images[index].length; i++){
-                         chaine += "<img src=\""+ tableau_images[index][i] +"\" width=\"100\" height=\"100\">"; 
-                      }
-                  }
-                  }
-                  
-                  return chaine;
-              }
-              
-              function autocompleteSearch(requete, search, autoriseBoucle, map){
-                  
-                  var listItems = $(requete);
-                  
-                  console.log(listItems);
-                  
-                  if(autoriseBoucle){
-                          listItems.on('click', function(){
-                          search.val($(this).find(".center h1").text());
-                              
-                              afficheMarkers(parseInt($(this).find(".center p").text()), map);
-                              
-                          $('#places_list').html('');
-                          
-                      });
-                  
-                  }
-              }
-              
-              
-              var map = L.map('mapid');
-              var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-              var osmAttrib = "Map data © OpenStreetMap contributors";
-                  
-                  var osm = new L.TileLayer(osmUrl, {attribution: osmAttrib});
-              
-              map.addLayer(osm);
-              
-              afficheMarkers("all", map);
-                  
-                  var controlFou = new L.Control.Gps({
-                  transform: function(realGps){
-                      tinnedGps.lat = realGps.lat;
-                      tinnedGps.lng = realGps.lng;
-                      return tinnedGps;
-                  },
-                  autoCenter: true,
-                  marker: L.marker([tinnedGps.lat, tinnedGps.lng])
-              });
-              
-              map.addControl(controlFou);
-                  
-                  $('.gps-button').on('click', function(){
-                                       if(!$(this).hasClass('active')){
-                                           
-                                           map.setView([48.7942, 2.46172], 15);
-                                       } 
-                                    });
-              
-              $('ons-page ons-search-input').on('keyup', function(){
-                 
-                  var valeur = $('ons-page ons-search-input').val();
-
-                  if(valeur !== ""){
-                      $.ajax({
-                     url: 'https://theosenilh.fr/api_appli_creteil/search_coords.php',
-                      method: 'GET',
-                      data: {api_key: "jdhey7te6", cherche: valeur.trim()},
-                      dataType: 'json',
-                      success: function(data){
-                          
-                          var chainehtml = "";
-                          
-                              if(data.length !== 0){
-                              for(var i = 0; i < data.length; i++){
-                              chainehtml += '<ons-list-item modifier="longdivider" tappable><h1>'+ data[i].nom_point_interet +'</h1><i>'+ data[i].adresse_point_interet +'</i><p style="display: none;">'+ data[i].id_point_interet +'</p></ons-list-item>';
-                          }
-                          } else {
-                              chainehtml = '<ons-list-item modifier="longdivider"><p>Pas de correspondance</p></ons-list-item>';
-                          }
-                              $('#places_list').html(chainehtml);
-                          autocompleteSearch('#places_list ons-list-item', $('ons-search-input'), (data.length !== 0), map);
-                          
-                      }
-                  });
-                      
-                  } else {
-                      $('#places_list').html("");
-                  }
-                  
-                  
-              });
-                } else if(page.id === "liste_parcours"){
-                    
-                    
-                    function listeParcours(option){
-                            return $.ajax({
-                               url: "https://theosenilh.fr/api_appli_creteil/liste_parcours.php",
-                                method: 'GET',
-                                data: {api_key: "jdhey7te6", parcours_id: option},
-                                dataType: 'json'
-                            });
-                        }
-                    
-                    listeParcours("all").done(function(data){
-                        var chaine = "";
-                        
-                        $.each(data, function(i){
-                            chaine += "<ons-list-item tappable tabindex=\""+ data[i].id_parcours +"\">"+ data[i].nom_parcours +"</ons-list-item>";
-                        });
-                        
-                        $('ons-card').html(chaine);
-                        
-                     $('ons-list-item').on('click', function(){
-                            document.querySelector('ons-navigator').pushPage('carte_parcours.html', {data: {id: $(this).attr('tabindex'), title: $(this).text()}});
-                        });
-                    });
-                    
-                    page.querySelector('ons-button').addEventListener('click', function(){
-                                navigatorM.pushPage('perso_parcours.html'); 
-                             });
-                        
-                        } else if(page.id === "perso_parcours"){
-                            
-                            checkedPlaces = [];
-                            
-                            $('ons-list').html('<br><br><div class="center"><ons-progress-circular indeterminate class="center"></ons-progress-circular></div>');
-                           
-                            $.ajax({
-                            url: 'https://theosenilh.fr/api_appli_creteil/json_coords.php',
-                             method: 'GET',
-                             data: {api_key: 'jdhey7te6', location_id: 'all'},
-                             dataType: 'json',
-                             success: function(data){
-                                 
-                                 var chaine = "";
-                                 
-                                 for(var i = 0; i < data.length; i++){
-                                     chaine += '<ons-list-item tappable><label class="left"><ons-checkbox input-id="'+ data[i].id_point_interet +'" value="['+ data[i].latitude_point_interet +', '+ data[i].longitude_point_interet +']"></ons-checkbox></label><label for="'+ data[i].id_point_interet +'" class="center">'+ data[i].nom_point_interet +'</label></ons-list-item>';
-                                 }
-                                 
-                                 $('ons-list').html(chaine);
-                                 
-                                 $('ons-list ons-list-item').on('click', function(){
-                                     checkedPlaces = $('ons-list ons-list-item ons-checkbox :checkbox:checked');
-                                     console.log(checkedPlaces);
-                                 });
-                                 
-                                 $('ons-button').on('click', function(){
-                                    navigatorM.pushPage('perso_carte.html', {data: {checked_elements: checkedPlaces}}); 
-                                 });
-                                 
-                             }
-                         });
-                            
-                        } else if(page.id === "perso_carte"){
-                                  
-                            
-                            var map = L.map('mapperso');
-              var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-              var osmAttrib = "Map data © OpenStreetMap contributors";
-                            
-                            var osm = new L.TileLayer(osmUrl, {attribution: osmAttrib});
-              
-              map.addLayer(osm);
-                            
-                            var tableauLieux = [];
-                            
-                            console.log(page.data.checked_elements);
-                            
-                            navigator.geolocation.getCurrentPosition(function(position){
-                               
-                                map.setView([position.coords.latitude, position.coords.longitude], 12);
-                                
-                                tableauLieux.push(L.latLng(position.coords.latitude, position.coords.longitude));
-                                
-                                for(var i = 0; i < page.data.checked_elements.length; i++){
-                                    tableauLieux.push(L.latLng(JSON.parse($(page.data.checked_elements[i]).val())));
-                                }
-                                
-                                L.Routing.control({
-                  waypoints: tableauLieux,
-                          router: L.Routing.mapbox("pk.eyJ1IjoidGhlb2Rvcm9zIiwiYSI6ImNqb2sxdW01YTAyN28zb21uY21jeXMzY3cifQ._g5OAq0Wjfou_LsBW07TAQ", {profile: "mapbox/walking"}),
-                                        lineOptions: {
-                                            addWaypoints: false
-                                        }
-              }).addTo(map);
-                                $('.leaflet-right').hide();
-                                
-                            });
-                                  
-                                  } else if(page.id === "carte_parcours"){
-                        
-                            page.querySelector('ons-toolbar .center').textContent = page.data.title;
-                            
-                            var map = L.map('map_parcours');
-              var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-              var osmAttrib = "Map data © OpenStreetMap contributors";
-                  
-                  var osm = new L.TileLayer(osmUrl, {attribution: osmAttrib});
-              
-              map.addLayer(osm);
-                            
-                            $.ajax({
-                               url: 'https://theosenilh.fr/api_appli_creteil/liste_points_interet_parcours.php',
-                                method: 'GET',
-                                data: {api_key: "jdhey7te6", parcours_id: parseInt(page.data.id)},
-                                dataType: 'json',
-                                success: function(data){
-                                    $('.leaflet-right').hide();
-                                    
-                                    console.log(data);
-                                    
-                                    var tableauWaypoints = [];
-                                    
-                                    navigator.geolocation.getCurrentPosition(function(position){
-                                        
-                                        map.setView([position.coords.latitude, position.coords.longitude], 12);
-                                       tableauWaypoints.push(L.latLng(position.coords.latitude, position.coords.longitude)); 
-                                        
-                                        $.each(data, function(i){
-                                       tableauWaypoints.push(L.latLng(parseFloat(data[i].latitude_point_interet), parseFloat(data[i].longitude_point_interet))); 
-                                    });
-                                    
-                                    console.log(tableauWaypoints);
-                                    
-                                    L.Routing.control({
-                  waypoints: tableauWaypoints,
-                          router: L.Routing.mapbox("pk.eyJ1IjoidGhlb2Rvcm9zIiwiYSI6ImNqb2sxdW01YTAyN28zb21uY21jeXMzY3cifQ._g5OAq0Wjfou_LsBW07TAQ", {profile: "mapbox/walking"}),
-                                        lineOptions: {
-                                            addWaypoints: false
-                                        }
-              }).addTo(map);
-                                        
-                                    });
-                                    
-                                }
-                            });
-                            
-                 } else if(page.id === "about"){
-                     
-                     function convertToMinutes(duration){
-                         var duration = ""+ duration/60 + "";
-                         
-                         if(duration.indexOf('.') !== -1){
-                             var tableau = duration.split('.');
-                             tableau[1] = "0." + tableau[1];
-                             var seconds = parseFloat(tableau[1]) * 60;
-                             
-                             return tableau[0] + "min" + Math.round(seconds) + "s";
-                         } else {
-                             return duration + "min";
-                         }
-                     }
-                     
-                     function convertToKilometers(distance){
-                         return distance/1000 + "km";
-                     }
-                     
-                     var map = L.map('maptest');
-              var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-              var osmAttrib = "Map data © OpenStreetMap contributors";
-                  
-                  var osm = new L.TileLayer(osmUrl, {attribution: osmAttrib});
-              
-              map.addLayer(osm);
-                     
-                     navigator.geolocation.getCurrentPosition(function(position){
-                        var waypoint = L.latLng(position.coords.latitude, position.coords.longitude);
-                        
-                         map.setView([position.coords.latitude, position.coords.longitude], 12);
-                        
-                         
-                         L.Routing.control({
-                  waypoints: [waypoint, L.latLng(48.796, 2.45226), L.latLng(48.7942, 2.46132)],
-                         language: 'fr',
-                          router: L.Routing.mapbox("pk.eyJ1IjoidGhlb2Rvcm9zIiwiYSI6ImNqb2sxdW01YTAyN28zb21uY21jeXMzY3cifQ._g5OAq0Wjfou_LsBW07TAQ", {profile: "mapbox/walking"}),
-                             lineOptions: {
-                                            addWaypoints: false,
-                                 draggableWaypoints: false
-                                        }
-              }).addTo(map);
-                     
-                     var coords = encodeURI(''+ position.coords.longitude +','+ position.coords.latitude +';2.45226,48.796;2.46132,48.7942');
-                     
-                     
-                     
-                     $.ajax({
-                        url: 'https://api.mapbox.com/directions/v5/mapbox/walking/' + coords + '.json',
-                         method: 'GET',
-                         data: {access_token: "pk.eyJ1IjoidGhlb2Rvcm9zIiwiYSI6ImNqb2sxdW01YTAyN28zb21uY21jeXMzY3cifQ._g5OAq0Wjfou_LsBW07TAQ", steps: "true", banner_instructions: "true", language: "fr"},
-                         dataType: 'json',
-                         success: function(data){
-                             
-                             var turnInstruction;
-                             
-                             console.log(data);
-                             
-                             console.log(convertToMinutes(data.routes[0].duration));
-                             
-                             console.log(convertToKilometers(data.routes[0].distance));
-                             
-                             if(data.routes[0].legs[0].steps[0].bannerInstructions[0].primary.type === "arrive"){
-                                 turnInstruction = "arrive";
-                             } else {
-                                 switch(data.routes[0].legs[0].steps[0].bannerInstructions[0].primary.modifier){
-                                 case "straight":
-                                     turnInstruction = "continue";
-                                     break;
-                                     
-                                 case "slight left":
-                                     turnInstruction = "bear-left";
-                                     break;
-                                     
-                                 case "slight right":
-                                     turnInstruction = "bear-right";
-                                     break;
-                                     
-                                 case "sharp right":
-                                     turnInstruction = "sharp-right";
-                                     break;
-                                     
-                                 case "sharp left":
-                                     turnInstruction = "sharp-left";
-                                     break;
-                                     
-                                 case "uturn":
-                                     turnInstruction = "u-turn";
-                                     break;
-                                     
-                                 default:
-                                     turnInstruction = data.routes[0].legs[0].steps[0].bannerInstructions[0].primary.type + "-" + data.routes[0].legs[0].steps[0].bannerInstructions[0].primary.modifier;
-                                     break;
-                                     
-                             }
-                                 
-                             }
-                             
-                             
-                             $('.leaflet-top.leaflet-right').html('<div class="leaflet-routing-container leaflet-bar leaflet-routing-collapsible leaflet-control"><div class="leaflet-routing-alternatives-container"><div class="leaflet-routing-alt"><div><span class="leaflet-routing-icon leaflet-routing-icon-'+ turnInstruction +'"></span></div><strong>'+ data.routes[0].legs[0].steps[0].distance +' m</strong><h1>' + data.routes[0].legs[0].steps[0].bannerInstructions[0].primary.text + '</h1></div></div></div>');
-                             
-                             $('.leaflet-top.leaflet-right .leaflet-routing-container .leaflet-routing-alternatives-container .leaflet-routing-alt').append('<blockquote><strong>'+ convertToKilometers(data.routes[0].distance) +', '+ convertToMinutes(data.routes[0].duration) +'</strong></blockquote>')
-                             
-                         }
-                     });
-                         
-                         
-                     });
-                     
-                     
-    }
-          
-      });
-      });
-    </script>
+    <script src="lib/onsenui/js/index.js"></script>
   
 </body>
 </html>

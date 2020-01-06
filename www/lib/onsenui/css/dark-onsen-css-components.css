@@ -2701,7 +2701,7 @@ h4, h5, h6 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: inline-flex;
-  fill: #ffa101;
+  fill: #ffffff;
   -webkit-box-align: center;
   -webkit-align-items: center;
           align-items: center;
@@ -2709,7 +2709,7 @@ h4, h5, h6 {
 }
 .back-button--material {
   font-size: 22px;
-  color: #ffa101;
+  color: #ffffff;
   display: inline-block;
   padding: 0 12px;
   height: 100%;

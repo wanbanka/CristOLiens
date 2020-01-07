@@ -18,7 +18,7 @@ Cette application utilise les frameworks et outils suivants:
 
 ![Logo Mapbox](https://miro.medium.com/max/2083/0*ok6yuDnTx4o2PSFx.png)
 
-* [Mapbox](https://www.mapbox.com/): service de cartographie open-source en ligne. L'API Directions a été utilisée, afin de récupérer les instructions GPS, permettant à l'utilisateur de mieux se repérer dans son parcours. 
+* [Mapbox](https://www.mapbox.com/): service de cartographie open-source en ligne. L'API Directions a été utilisée, afin de récupérer les instructions GPS, permettant à l'utilisateur de mieux se repérer dans son parcours. Son service de routing a également permis de générer les tracés d'itinéraires avec Leaflet Routing Machine.
 
 Voici les différentes étapes pour visualiser le projet sur ordinateur: 
 

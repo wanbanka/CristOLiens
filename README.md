@@ -2,7 +2,7 @@
 
 ![Logo CristOLiens](https://github.com/wanbanka/CristOLiens/blob/master/res/android/icon/xxxhdpi.png?raw=true)
 
-Lors de l'année de licence professionnelle CRRW à Champs-sur-Marne, nous devions par grouper réaliser un projet numérique pour le compte de la mairie de Créteil. Notre groupe de projet devait créer une application mobile qui regroupe des parcours dans la ville, reliant différents points d'intérêt. Cette application est construite grâce au framework mobile [OnsenUI](https://onsen.io/) et à son écosystème [Monaca](https://monaca.io/). 
+Lors de l'année de licence professionnelle CRRW à Champs-sur-Marne, nous devions par groupe réaliser un projet numérique pour le compte de la mairie de Créteil. Notre groupe de projet devait créer une application mobile qui regroupe des parcours dans la ville, reliant différents points d'intérêt. Cette application est construite grâce au framework mobile [OnsenUI](https://onsen.io/) et à son écosystème [Monaca](https://monaca.io/). 
 
 Cette application utilise les frameworks et outils suivants: 
 

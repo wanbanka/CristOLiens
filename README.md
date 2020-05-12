@@ -30,7 +30,7 @@ Voici les différentes étapes pour visualiser le projet sur ordinateur:
 5. En ligne de commande, placez-vous dans le dossier du projet
 6. Puis tapez `npm run monaca:preview`. Le navigateur s'ouvre avec la visualisation de votre projet. 
 
-**ATTENTION**: La géolocalisation n'est pas très opérationnelle sur ordinateur. 
+**ATTENTION**: La géolocalisation n'est pas opérationnelle sur ordinateur. 
 
 Pour visualiser le projet sur téléphone (Android uniquement): 
 

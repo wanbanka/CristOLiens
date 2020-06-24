@@ -27,18 +27,16 @@ Voici les différentes étapes pour visualiser le projet sur ordinateur:
 2. Sur NodeJS, installez OnsenUI: `npm install onsenui`. 
 3. Puis installez Monaca: `npm install -g monaca`
 4. Téléchargez ou clonez le dépôt (`git clone https://github.com/wanbanka/CristOLiens.git`, puis `git pull`)
-5. En ligne de commande, placez-vous dans le dossier du projet
+5. En ligne de commande, placez-vous à la racine du dossier du projet
 6. Puis tapez `npm run monaca:preview`. Le navigateur s'ouvre avec la visualisation de votre projet. 
 
 **ATTENTION**: La géolocalisation n'est pas opérationnelle sur ordinateur. 
 
 Pour visualiser le projet sur téléphone (Android uniquement): 
 
-1. Créez un compte sur [Monaca](https://monaca.io), puis connectez-vous. Choisissez l'abonnement gratuit.
-2. Allez sur "Import", puis sur "Upload Project Package" (compressez au préalable le dossier du projet).
-3. Cliquez sur le projet, puis sur "Open in Cloud IDE". Vous arrivez sur l'IDE de Monaca, avec le projet.
-4. Sur le menu en haut, cliquez sur "Build", puis sur "Build app for Android". 
-5. Laissez les options "Build for debugging" et "Debug Build" activées, puis cliquez sur "Start Build". Un fichier APK sera téléchargé automatiquement.
-6. Transférez le fichier APK dans votre téléphone.
-7. Sur votre téléphone, allez sur les fichiers du téléphone, puis sur "Fichiers installés". Vous devrez normalement retrouver le fichier transféré. 
-8. Cliquez sur le fichier, puis sur Installer. Et vous pouvez enfin visualiser l'application sur votre téléphone !
+1. En ligne de commande, placez-vous à la racine du dossier du projet.
+2. Tapez `monaca build`.
+3. Une fois l'opération effectuée, dirigez-vous vers le dossier `platforms\android\build\outputs\apk` de votre projet. Vous trouverez un fichier APK nommé `android-debug.apk`. Cela signifie que le build de l'application a bien été effectuée. 
+4. Transférez le fichier APK dans votre téléphone.
+5. Sur votre téléphone, allez sur les fichiers du téléphone, puis sur "Fichiers installés". Vous devrez normalement retrouver le fichier transféré. 
+6. Cliquez sur le fichier, puis sur Installer. Et vous pouvez enfin visualiser l'application sur votre téléphone !
